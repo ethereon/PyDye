@@ -1,7 +1,7 @@
 import AppKit as ak
-from utils import *
-from structs import *
-import AffineTransform
+from .utils import *
+from .geometry import Rect, nsrect_to_rect
+from . import AffineTransform
 
 class BezierPath(object):
 
@@ -82,3 +82,10 @@ class Oval(BezierPath):
             raise ValueError("Parameters for establishing the oval's bounding rect not specified.")
         path = ak.NSBezierPath.bezierPathWithOvalInRect_(rect.nsrect())
         super(Oval, self).__init__(path)
+
+def draw_line(p1, p2, line_width=None, color=None):
+  prev_line_width = ak.NSBezierPath.defaultLineWidth()
+  ak.NSBezierPath.setDefaultLineWidth_(line_width)
+  op = lambda: ak.NSBezierPath.strokeLineFromPoint_toPoint_(nspoint(p1), nspoint(p2))
+  perform_op_with_color(op, stroke_color=color)
+  ak.NSBezierPath.setDefaultLineWidth_(prev_line_width)
