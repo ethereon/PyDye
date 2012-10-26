@@ -29,3 +29,6 @@ class Rect:
 
 def nsrect_to_rect(r):
     return Rect(r.origin.x, r.origin.y, r.size.width, r.size.height)
+
+def nspoint(p):
+    return ak.NSMakePoint(p[0], p[1])
