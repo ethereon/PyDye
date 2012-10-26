@@ -1,7 +1,7 @@
 import AppKit as ak
 import Quartz as qtz
 import os
-from ImageObject import ImageObject
+from .ImageObject import ImageObject
 
 class Image(ImageObject):
     

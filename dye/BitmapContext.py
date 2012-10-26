@@ -1,10 +1,10 @@
+import os
 import Quartz as qtz
 import AppKit as ak
-import os
-from ImageObject import ImageObject
-from Image import Image
-from structs import *
-from utils import *
+from .ImageObject import ImageObject
+from .Image import Image
+from .geometry import Rect
+from .utils import current_graphics_port
 
 class BitmapContext(ImageObject):
 

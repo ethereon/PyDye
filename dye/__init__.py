@@ -14,6 +14,6 @@ from .BezierPath import *
 from .Color import *
 from .utils import *
 from .ContextFrame import *
-from .structs import *
+from .geometry import *
 from .AffineTransform import *
 from .Gradient import *

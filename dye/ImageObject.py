@@ -1,11 +1,11 @@
 import os, tempfile
 from . import utils
-from . import structs
+from . import geometry
 
 class ImageObject:
 
     def bounds(self):
-        return structs.Rect(0, 0, self.width, self.height)
+        return geometry.Rect(0, 0, self.width, self.height)
 
     def save(self, path):
         bmp_rep = self.bitmap_representation()
