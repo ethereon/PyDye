@@ -1,8 +1,14 @@
 import AppKit as ak
 
 class AffineTransform:
-    def __init__(self):
-        self.transform = ak.NSAffineTransform.transform()
+    def __init__(self, transform=None):
+        if transform is None:
+            self.transform = ak.NSAffineTransform.transform()
+        else:
+            self.transform = ak.NSAffineTransform.alloc().initWithTransform_(transform.nstransform())
+
+    def nstransform(self):
+        return self.transform
 
     def rotate_degrees(self, degs):
         self.transform.rotateByDegrees_(degs)
@@ -27,9 +33,20 @@ class AffineTransform:
     def invert(self):
         self.transform.invert()
 
-    def apply(self, x, y):
+    def transform_point(self, x, y):
         p = self.transform.transformPoint((x, y))
         return (p.x, p.y)
+
+    def concat(self):
+        self.transform.concat()
+
+    def __enter__(self):
+        self.concat()
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        inverse_xform = AffineTransform(transform=self)
+        inverse_xform.invert()
+        inverse_xform.concat()
 
 def translation(dx, dy):
     xform = AffineTransform()
