@@ -20,12 +20,18 @@ class BezierPathTests(DyeTestCase):
             bp.stroke()
         self.save(img, 'Circle with red fill and blue stroke')
 
-    def test_line(self):
+    def test_multi_line(self):
         bp = right_arrow_path(600, 600)
         r = bp.bounds(stroked=False)
         with dye.Image(r.w, r.h) as img:
             bp.fill(color=RED)
         self.save(img, 'Red arrow pointing right')
+
+    def test_draw_line(self):
+        with dye.Image(200, 200) as img:
+            dye.draw_line((0, 0), (200, 200), color=RED, thickness=5)
+            dye.draw_line((0, 200), (200, 0), color=BLUE)
+        self.save(img, 'Thick-Red thin-blue full-sized cross')
 
     def test_clipping(self):
         img_rect = dye.Rect(0, 0, 200, 200)
