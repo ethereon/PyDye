@@ -3,6 +3,7 @@ test:
 
 install:
 	python setup.py install
+	$(MAKE) clean
 
 clean:
 	python setup.py clean --all
