@@ -32,15 +32,3 @@ def save_graphics_state():
 
 def restore_graphics_state():
     ak.NSGraphicsContext.restoreGraphicsState()
-
-def perform_op_with_color(func, fill_color=None, stroke_color=None):
-    if (fill_color is None ) and (stroke_color is None):
-        func()
-    else:
-        save_graphics_state()
-        if fill_color is not None:
-            fill_color.set_fill()
-        if stroke_color is not None:
-            stroke_color.set_stroke()
-        func()
-        restore_graphics_state()

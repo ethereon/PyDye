@@ -1,6 +1,6 @@
 import AppKit as ak
-from .utils import *
-from .geometry import Rect, nsrect_to_rect
+from .geometry import Rect, nsrect_to_rect, nspoint
+from .Color import ColorContext
 from . import AffineTransform
 
 class BezierPath(object):
@@ -15,10 +15,12 @@ class BezierPath(object):
         return self.path
             
     def fill(self, color=None):
-        perform_op_with_color(self.path.fill, fill_color=color)
+        with ColorContext(fill_color=color):
+            self.path.fill()
 
     def stroke(self, color=None):
-        perform_op_with_color(self.path.stroke, stroke_color=color)
+        with ColorContext(stroke_color=color):
+            self.path.stroke()
 
     def fill_stroke(self, fill_color=None, stroke_color=None):
         self.fill(fill_color)

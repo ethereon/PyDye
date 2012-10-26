@@ -1,4 +1,6 @@
 import AppKit as ak
+from contextlib import contextmanager
+from .utils import save_graphics_state, restore_graphics_state
 
 class Color(object):
     def __init__(self, color):
@@ -78,3 +80,16 @@ class HSV(HSVA):
 class Gray(Color):
     def __init__(self, level):
         self.color = ak.NSColor.colorWithCalibratedWhite_alpha_(level, 1.0)
+
+@contextmanager
+def ColorContext(stroke_color=None, fill_color=None):
+    if (fill_color is None ) and (stroke_color is None):
+        yield
+    else:
+        save_graphics_state()
+        if fill_color is not None:
+            fill_color.set_fill()
+        if stroke_color is not None:
+            stroke_color.set_stroke()
+        yield
+        restore_graphics_state()
