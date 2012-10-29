@@ -53,26 +53,26 @@ class BitmapContext(ImageObject):
             self.image = qtz.CGBitmapContextCreateImage(self.context)
         return self.image
 
-    def set_pixel(self, i, j, r, g, b, a=255):
-        offset = self.BYTES_PER_PIXEL*(self.width*i+j)
+    def get_pixel(self, x, y):
+        offset = int(self.BYTES_PER_PIXEL*(self.width*y+x))
+        return map(ord, (self.data[offset], self.data[offset+1], self.data[offset+2], self.data[offset+3]))
+
+    def set_pixel(self, x, y, r, g, b, a=255):
+        offset = self.BYTES_PER_PIXEL*(self.width*y+x)
         self.data[offset] = chr(r)
         self.data[offset+1] = chr(g)
         self.data[offset+2] = chr(b)
-        self.data[offset+3] = chr(a)
-
-    def get_pixel(self, i, j):
-        offset = int(self.BYTES_PER_PIXEL*(self.width*i+j))
-        return map(ord, (self.data[offset], self.data[offset+1], self.data[offset+2], self.data[offset+3]))
+        self.data[offset+3] = chr(a)    
 
     def set_pixels(self, func):
-        for i in xrange(self.width):
-            for j in xrange(self.height):
-                self.set_pixel(i, j, *(func(i, j)))
+        for x in xrange(self.width):
+            for y in xrange(self.height):
+                self.set_pixel(x, y, *(func(x, y)))
 
     def map_pixels(self, func):
-        for i in xrange(self.width):
-            for j in xrange(self.height):
-                self.set_pixel(i, j, *(func(*(self.get_pixel(i,j)))))
+        for x in xrange(self.width):
+            for y in xrange(self.height):
+                self.set_pixel(x, y, *(func(*(self.get_pixel(x, y)))))
 
     def draw(self, inRect=None):
         inRect = inRect or Rect(0, 0, self.width, self.height)
