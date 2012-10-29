@@ -64,6 +64,20 @@ class BitmapContext(ImageObject):
         self.data[offset+2] = chr(b)
         self.data[offset+3] = chr(a)    
 
+    def composite_pixel(self, x, y, r, g, b, a):
+        _r, _g, _b, _a = self.get_pixel(x, y)
+        _a /= 255.0
+        s = _a/255.0
+        _r, _g, _b = _r*s, _g*s, _b*s
+        d = (1-_a)
+        a /= 255.0
+        s = a/255.0
+        r = int(255*(_r + r*s*d))
+        g = int(255*(_g + g*s*d))
+        b = int(255*(_b + b*s*d))
+        a = int(255*(_a + a*d))
+        self.set_pixel(x, y, r, g, b, a)
+
     def set_pixels(self, func):
         for x in xrange(self.width):
             for y in xrange(self.height):
