@@ -14,7 +14,7 @@ class AffineTransform:
         self.transform.rotateByDegrees_(degs)
 
     def rotate_radians(self, rads):
-        self.transform.rotateByRadians(rads)
+        self.transform.rotateByRadians_(rads)
 
     def scale(self, scaleX, scaleY=None):
         if scaleY is None:
@@ -42,6 +42,7 @@ class AffineTransform:
 
     def __enter__(self):
         self.concat()
+        return self
 
     def __exit__(self, exc_type, exc_value, traceback):
         inverse_xform = AffineTransform(transform=self)
