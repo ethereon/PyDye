@@ -1,6 +1,8 @@
 import AppKit as ak
+import Quartz as qtz
 from .geometry import Rect, nsrect_to_rect, nspoint
 from .Color import ColorContext
+from .utils import current_graphics_port
 from . import AffineTransform
 
 class BezierPath(object):
@@ -13,7 +15,41 @@ class BezierPath(object):
 
     def nsbezierpath(self):
         return self.path
-            
+
+    def quartz_path(self):
+        numElements = self.path.elementCount()
+        if numElements==0:
+            return None
+        path = qtz.CGPathCreateMutable()
+        did_close_path = True
+        for i in xrange(numElements):
+            path_type, points = self.path.elementAtIndex_associatedPoints_(i)
+            if path_type==ak.NSMoveToBezierPathElement:
+                qtz.CGPathMoveToPoint(path, None, points[0].x, points[0].y)
+            elif path_type==ak.NSLineToBezierPathElement:
+                qtz.CGPathAddLineToPoint(path, None, points[0].x, points[0].y)
+                did_close_path = False
+            elif path_type==ak.NSCurveToBezierPathElement:                    
+                qtz.CGPathAddCurveToPoint(path, None,
+                                          points[0].x, points[0].y,
+                                          points[1].x, points[1].y,
+                                          points[2].x, points[2].y)
+                did_close_path = False
+            elif path_type==NSClosePathBezierPathElement:
+                qtz.CGPathCloseSubpath(path)
+                did_close_path = True
+        if not did_close_path:
+            qtz.CGPathCloseSubpath(path)
+        immutable_path = qtz.CGPathCreateCopy(path);
+        return immutable_path
+
+    def clip_to_outline(self):
+        cgpath = self.quartz_path()
+        ctx = current_graphics_port()
+        qtz.CGContextAddPath(ctx, cgpath)
+        qtz.CGContextReplacePathWithStrokedPath(ctx)
+        qtz.CGContextClip(ctx)
+
     def fill(self, color=None):
         with ColorContext(fill_color=color):
             self.path.fill()
