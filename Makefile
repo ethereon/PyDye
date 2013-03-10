@@ -2,7 +2,7 @@ test:
 	python -c "import tests; tests.run()"
 
 install:
-	python setup.py install
+	python setup.py install --user
 	$(MAKE) clean
 
 clean:
