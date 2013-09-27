@@ -12,7 +12,6 @@ class BitmapContext(ImageObject):
     BYTES_PER_PIXEL = 4
 
     def __init__(self, w=None, h=None, path=None):
-        self.image = None
         if path is not None:
             path = os.path.expanduser(path)
             img = Image(path=path)
@@ -49,9 +48,7 @@ class BitmapContext(ImageObject):
             del self.context_to_restore
 
     def get_image(self):
-        if self.image is None:
-            self.image = qtz.CGBitmapContextCreateImage(self.context)
-        return self.image
+        return qtz.CGBitmapContextCreateImage(self.context)
 
     def get_pixel(self, x, y):
         offset = int(self.BYTES_PER_PIXEL*(self.width*y+x))
@@ -62,7 +59,7 @@ class BitmapContext(ImageObject):
         self.data[offset] = chr(r)
         self.data[offset+1] = chr(g)
         self.data[offset+2] = chr(b)
-        self.data[offset+3] = chr(a)    
+        self.data[offset+3] = chr(a)
 
     def composite_pixel(self, x, y, r, g, b, a):
         _r, _g, _b, _a = self.get_pixel(x, y)
