@@ -25,7 +25,7 @@ class BitmapContext(ImageObject):
             raise ValueError('Either an image path or dimensions for a new image must be provided.')
 
     def _create_context_with_size(self, w, h):
-        self.width, self.height = w, h
+        self.width, self.height = int(w), int(h)
         self.context = qtz.CGBitmapContextCreate(None,
                                                  w,
                                                  h,
