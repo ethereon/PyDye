@@ -23,10 +23,11 @@ class Image(ImageObject):
         img_size = self.img.size()
         self.width, self.height = img_size.width, img_size.height
 
-    def draw(self, x=0, y=0, w=None, h=None):
-        w, h = w or self.width, h or self.height
-        self.img.drawInRect_fromRect_operation_fraction_respectFlipped_hints_(ak.NSMakeRect(x, y, w, h),
-                                                                              ak.NSZeroRect,
+    def draw(self, dest_rect = None, src_rect = None):
+        src_rect = src_rect.nsrect() if src_rect is not None else ak.NSZeroRect
+        dest_rect = dest_rect.nsrect() if dest_rect is not None else ak.NSZeroRect
+        self.img.drawInRect_fromRect_operation_fraction_respectFlipped_hints_(dest_rect,
+                                                                              src_rect,
                                                                               ak.NSCompositeSourceOver,
                                                                               1.0,
                                                                               True,
