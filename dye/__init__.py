@@ -17,3 +17,5 @@ from .ContextFrame import *
 from .geometry import *
 from .AffineTransform import *
 from .Gradient import *
+from .Font import*
+from .Text import *
